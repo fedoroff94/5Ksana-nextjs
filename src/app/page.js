@@ -1,103 +1,257 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
+import gsap from "gsap";
+import Model from "../components/Model";
+import CardShow from "../components/CardShow";
+import Footer from "../components/Footer";
+import { useSearchParams } from "next/navigation";
+import ContactForm from "../components/ContactForm";
+import useResponsive from "../hooks/useResponsive";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { motion } from "framer-motion";
+import { createMarkup } from "../utils";
+import SEO from "../utils/SEO";
+import axios from "axios";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Modal from "../components/Modal";
+import SuccessPopup from "../components/SuccessPopup";
+import Link from "next/link";
+
+const Home = ({ setCart, cart }) => {
+  const searchParams = useSearchParams();
+  const btcRef = useRef();
+  const [isAnimend, setIsAnimend] = useState(false);
+  const [settings, setSettings] = useState(null);
+  const [cards, setCards] = useState(null);
+  const { isBigLaptop, isSmallMobile, isMobile } = useResponsive();
+
+  const activated = searchParams.get("activated");
+
+  const fetchSettings = useCallback(async () => {
+    try {
+      const [settingsRes, cardsRes] = await Promise.all([
+        axios.get(
+          `${import.meta.env.NEXT_PUBLIC_DB_LINK}/api/settings/mainpage`,
+        ),
+        axios.get(
+          `${import.meta.env.NEXT_PUBLIC_DB_LINK}/api/products/first-two`,
+        ),
+      ]);
+      setSettings(settingsRes.data);
+      setCards(cardsRes.data);
+    } catch (error) {
+      console.error("Failed to fetch website settings: ", error);
+    }
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!isBigLaptop) {
+      const element = document.querySelector(".cardsCont");
+      if (element) {
+        gsap.set(".horizontalSection", { x: 0 });
+
+        const animation = gsap.to(".horizontalSection", {
+          x: -element.offsetWidth,
+          scrollTrigger: {
+            trigger: ".website-content",
+            start: "top top",
+            end: `+=${element.offsetWidth}`,
+            pin: true,
+            scrub: 1,
+          },
+        });
+
+        return () => {
+          animation.kill();
+          ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+        };
+      }
+    }
+  }, [isBigLaptop, settings]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsAnimend(true), 7000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    fetchSettings();
+  }, [fetchSettings]);
+
+  if (!settings || !cards)
+    return (
+      <>
+        <SEO
+          title="5KSANA | Bitcoin Artist and Fashion Designer"
+          description="Discover Bitcoin-inspired art & fashion by 5KSANA. Unique crypto paintings, sculptures & designs blending blockchain culture with creativity."
+          name="5ksana - Bitcoin Artist and Fashion Designer"
+          type="page"
+          page=""
         />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+        <div>Loading Home Page...</div>
+      </>
+    );
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+  return (
+    <>
+      <SEO
+        title="5KSANA | Bitcoin Artist and Fashion Designer"
+        description="Discover Bitcoin-inspired art & fashion by 5KSANA. Unique crypto paintings, sculptures & designs blending blockchain culture with creativity."
+        name="5ksana - Bitcoin Artist and Fashion Designer"
+        type="page"
+        page=""
+      />
+      <div className={`w-[100vw] h-full overflow-x-hidden`}>
+        {/* Sticky Section */}
+        <section
+          className={`stickySection relative w-[100vw] h-auto xl:min-h-[100svh] bg-black pt-[4.063rem] px-[16px] xl:px-[6.25rem] transition-[left] duration-[850ms] ${
+            !isBigLaptop ? (isAnimend ? "left-0" : "left-[-22.5%]") : ""
+          }`}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          <div className="w-full h-[100%] xl:h-[100vh] flex xl:flex-row flex-col-reverse items-center justify-between relative">
+            <div
+              className={`w-full h-auto relative xl:mt-[0px] mt-[20px] z-[1] transition-[left,opacity] duration-700 delay-200 ${
+                !isBigLaptop
+                  ? isAnimend
+                    ? "left-0 opacity-100 pointer-events-auto"
+                    : "left-[-10%] opacity-0 pointer-events-none"
+                  : ""
+              }`}
+            >
+              <div className="w-auto xl:max-w-[413px] h-auto relative flex flex-col">
+                <h1
+                  className={`font-main font-[700] ${
+                    isSmallMobile ? "text-7xl" : "text-8xl"
+                  } sm:text-9xl uppercase sm:tracking-wider xl:text-left text-center`}
+                >
+                  {settings.sections[0].title}
+                </h1>
+                <span
+                  dangerouslySetInnerHTML={createMarkup(
+                    settings.sections[0].description,
+                  )}
+                  className="mt-2 sm:mt-6 font-main font-[400] text-lg sm:text-[2.5rem] uppercase sm:leading-[3rem] sm:tracking-wider xl:text-left text-center opacity-90"
+                />
+                <Link
+                  href="/gallery"
+                  className="font-main xl:w-max w-full xl:max-w-max max-w-[90%] xl:mx-0 mx-auto text-center text-base uppercase mt-5 sm:mt-[55px] border-[1px] border-[#2c2c2e] py-2.5 px-6 rounded-[1.8rem] font-[500] transition duration-[250ms] hover:text-[#522700] hover:bg-[#FCCB00] hover:border-[#FCCB00]"
+                >
+                  Browse Gallery
+                </Link>
+                <button
+                  onClick={() =>
+                    gsap.to(window, {
+                      duration: 1,
+                      scrollTo: document.querySelector(".website-content"),
+                      ease: "power1.inOut",
+                    })
+                  }
+                  className={`w-[130px] opacity-50 hover:opacity-70 transition-[opacity,left] duration-700 h-[130px] flex items-center justify-center relative rounded-full mt-14 sm:mt-[70px] xl:mx-0 mx-auto group ${
+                    !isBigLaptop
+                      ? isAnimend
+                        ? "left-0 opacity-100 delay-300"
+                        : "-left-[20%] opacity-0"
+                      : ""
+                  }`}
+                >
+                  <img
+                    src="/roundedScroll.svg"
+                    alt="rounded-scroll"
+                    className="w-full h-auto absolute inset-0 object-contain pointer-events-none group-hover:rotate-[360deg] transition-transform duration-1000"
+                    draggable={false}
+                  />
+                  <img
+                    src="/down-arrow.svg"
+                    alt="down-arrow"
+                    className="w-[28px] h-[28px] object-contain group-hover:scale-110 transition-transform duration-700"
+                    draggable={false}
+                  />
+                </button>
+              </div>
+            </div>
+
+            <div className="w-full h-full relative">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 70 }}
+                transition={{ duration: 7 }}
+                className={`absolute w-[35rem] h-[35rem] bg-[#FFB82BB2] left-[50%] xl:left-[55%] top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full webkitBlurIos250 pointer-events-none xl:scale-100 scale-[0.5] sm:scale-[0.75]`}
+              />
+              <div className="w-full h-full relative flex justify-center items-center">
+                <Model btcRef={btcRef} />
+              </div>
+            </div>
+          </div>
+
+          <div className="tracker"></div>
+        </section>
+
+        {/* Website Content */}
+        <main
+          className={`website-content z-[1] relative block w-full h-auto min-h-[1695px] overflow-hidden`}
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          <section className="w-full h-auto sm:h-[100vh] sm:pb-0 pb-10 relative">
+            <div className="w-auto xl:w-max h-auto xl:h-[100vh] xl:mt-0 mt-[120px] relative xl:flex-row flex-col flex xl:justify-center xl:items-center horizontalSection">
+              <h2
+                dangerouslySetInnerHTML={createMarkup(
+                  settings.sections[1].title,
+                )}
+                className={`font-extra w-auto xl:w-[100vw] text-center uppercase ${
+                  isSmallMobile ? "text-4xl" : "text-5xl"
+                } sm:text-8xl xl:text-[10rem] leading-[100%] relative`}
+              />
+              <div className="min-w-[100vw] flex sm:justify-center items-center px-[16px] xl:px-[6.25rem] cardsCont xl:mt-0 sm:mt-14 mt-7">
+                <div className="w-full h-auto flex gap-6 xl:gap-20 items-center">
+                  {isMobile ? (
+                    <Swiper
+                      slidesPerView={"auto"}
+                      spaceBetween={30}
+                      className={`w-max pr-6`}
+                    >
+                      {cards.map((product, index) => (
+                        <SwiperSlide className="!w-[316px]" key={index}>
+                          <CardShow
+                            data={product}
+                            setCart={setCart}
+                            cart={cart}
+                          />
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
+                  ) : (
+                    <>
+                      {cards.map((product, index) => (
+                        <CardShow
+                          data={product}
+                          key={index}
+                          setCart={setCart}
+                          cart={cart}
+                        />
+                      ))}
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <ContactForm decor />
+          <Footer />
+        </main>
+      </div>
+
+      <Modal isOpen={activated}>
+        <SuccessPopup />
+      </Modal>
+    </>
   );
-}
+};
+
+export default Home;
