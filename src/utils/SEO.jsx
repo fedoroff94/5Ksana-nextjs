@@ -7,10 +7,6 @@ const SEO = ({ title, description, type = "website", name, page }) => {
     <Head>
       <meta name="author" content="5KSANA" />
       <meta name="robots" content="index, follow" />
-      <meta
-        name="google-site-verification"
-        content="5rlIsYny0bY8Wc7RUj6ekpKOSafkNWLaHZ1HFN186uE"
-      />
       <meta name="language" content="English" />
       <meta name="revisit-after" content="7 days" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />

@@ -14,7 +14,7 @@ import Link from "next/link";
 const CardProduct = ({ data, setCart, cart, auction, priceType }) => {
   const { isSmallMobile } = useResponsive();
   const [isAdded, setIsAdded] = useState(
-    cart.find((item) => item.hash === data.hash),
+    cart?.find((item) => item.hash === data.hash),
   );
   const shortName = data.hash.split("-");
   const capitalizeShortName = shortName
@@ -23,7 +23,7 @@ const CardProduct = ({ data, setCart, cart, auction, priceType }) => {
 
   function addToCart() {
     setIsAdded(true);
-    const exsistedOne = cart.find((item) => item.hash === data.hash);
+    const exsistedOne = cart?.find((item) => item.hash === data.hash);
     toast.success(`"${capitalizeShortName}" Added to cart`);
     if (exsistedOne)
       return setCart(
@@ -37,7 +37,7 @@ const CardProduct = ({ data, setCart, cart, auction, priceType }) => {
   }
 
   useEffect(() => {
-    setIsAdded(Boolean(cart.find((item) => item.hash === data.hash)));
+    setIsAdded(Boolean(cart?.find((item) => item.hash === data.hash)));
   }, [cart, auction]);
 
   return (

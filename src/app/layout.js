@@ -11,6 +11,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        <meta
+          name="google-site-verification"
+          content="5rlIsYny0bY8Wc7RUj6ekpKOSafkNWLaHZ1HFN186uE"
+        />
         <link rel="icon" href="/favicon.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link

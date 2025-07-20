@@ -51,7 +51,7 @@ const Product = ({ cart, setCart }) => {
   }, [data?.hash]);
 
   const isAddedToCart = useMemo(
-    () => Boolean(cart.find((item) => item?.hash === data?.hash)),
+    () => Boolean(cart?.find((item) => item?.hash === data?.hash)),
     [cart, data?.hash],
   );
 
@@ -70,7 +70,7 @@ const Product = ({ cart, setCart }) => {
   const addToCart = () => {
     toast.success(`"${capitalizeShortName}" Added to cart`);
     setCart((prevCart) => {
-      const existingProduct = prevCart.find((item) => item.hash === data.hash);
+      const existingProduct = prevCart?.find((item) => item.hash === data.hash);
       return existingProduct
         ? prevCart.map((item) =>
             item.hash === data.hash
