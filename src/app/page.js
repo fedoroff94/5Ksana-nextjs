@@ -37,12 +37,8 @@ const Home = ({ setCart, cart }) => {
   const fetchSettings = useCallback(async () => {
     try {
       const [settingsRes, cardsRes] = await Promise.all([
-        axios.get(
-          `${import.meta.env.NEXT_PUBLIC_DB_LINK}/api/settings/mainpage`,
-        ),
-        axios.get(
-          `${import.meta.env.NEXT_PUBLIC_DB_LINK}/api/products/first-two`,
-        ),
+        axios.get(`${process.env.NEXT_PUBLIC_DB_LINK}/api/settings/mainpage`),
+        axios.get(`${process.env.NEXT_PUBLIC_DB_LINK}/api/products/first-two`),
       ]);
       setSettings(settingsRes.data);
       setCards(cardsRes.data);

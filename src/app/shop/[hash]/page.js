@@ -85,8 +85,8 @@ const Product = ({ cart, setCart }) => {
     const fetchProductDetails = async () => {
       try {
         const [productResponse, relatedResponse] = await Promise.all([
-          axios.get(`${import.meta.env.VITE_DB_LINK}/api/products/${hash}`),
-          axios.get(`${import.meta.env.VITE_DB_LINK}/api/products`),
+          axios.get(`${process.env.VITE_DB_LINK}/api/products/${hash}`),
+          axios.get(`${process.env.VITE_DB_LINK}/api/products`),
         ]);
 
         setData(productResponse.data);

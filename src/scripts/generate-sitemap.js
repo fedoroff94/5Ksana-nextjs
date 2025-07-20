@@ -3,7 +3,7 @@ import { createWriteStream } from "fs";
 import gallery from "./gallery.js";
 import shop from "./shop.js";
 
-const domain = "https://seo-5ksana-app-490f934d6782.herokuapp.com/";
+const domain = "https://nextjsksana-116d13a57852.herokuapp.com/";
 
 async function generateSitemap() {
   const sitemap = new SitemapStream({ hostname: domain });

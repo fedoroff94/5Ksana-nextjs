@@ -35,7 +35,7 @@ const Shop = ({ setCart, cart }) => {
 
   const fetchBTCPrice = useCallback(async () => {
     try {
-      const { data } = await axios.get(import.meta.env.VITE_USDBTC_API);
+      const { data } = await axios.get(process.env.VITE_USDBTC_API);
       setBtcPrice(data.USD.sell);
     } catch (error) {
       console.error("Failed to fetch BTC price:", error);
@@ -46,8 +46,8 @@ const Shop = ({ setCart, cart }) => {
     setLoading(true);
     try {
       const [productsRes, auctionsRes] = await Promise.all([
-        axios.get(`${import.meta.env.NEXT_PUBLIC_DB_LINK}/api/products`),
-        axios.get(`${import.meta.env.NEXT_PUBLIC_DB_LINK}/api/auctions`),
+        axios.get(`${process.env.NEXT_PUBLIC_DB_LINK}/api/products`),
+        axios.get(`${process.env.NEXT_PUBLIC_DB_LINK}/api/auctions`),
       ]);
       setProducts(productsRes.data || []);
       setAuctions(auctionsRes.data || []);
@@ -160,7 +160,7 @@ const Shop = ({ setCart, cart }) => {
     const getSettings = async () => {
       try {
         const { data } = await axios.get(
-          `${import.meta.env.NEXT_PUBLIC_DB_LINK}/api/settings/shop`,
+          `${process.env.NEXT_PUBLIC_DB_LINK}/api/settings/shop`,
         );
         setSettings(data);
       } catch (error) {
