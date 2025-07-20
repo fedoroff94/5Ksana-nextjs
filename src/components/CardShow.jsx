@@ -10,7 +10,7 @@ import Link from "next/link";
 const CardShow = ({ data, setCart, cart }) => {
   const { isSmallMobile, isMobile } = useResponsive();
   const [isAdded, setIsAdded] = useState(
-    Boolean(cart.find((item) => item.hash === data.hash)),
+    Boolean(cart?.find((item) => item.hash === data.hash)),
   );
   const shortName = data.hash.split("-");
   const capitalizeShortName = shortName
@@ -33,7 +33,7 @@ const CardShow = ({ data, setCart, cart }) => {
   }
 
   useEffect(() => {
-    setIsAdded(Boolean(cart.find((item) => item.hash === data.hash)));
+    setIsAdded(Boolean(cart?.find((item) => item.hash === data.hash)));
   }, [cart]);
 
   return (
