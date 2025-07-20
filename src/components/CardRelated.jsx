@@ -1,13 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import PriceLabel from "./PriceLabel";
 import ImageLoader from "./ImageLoader";
 import { getPrice } from "../utils";
+import Link from "next/link";
 
 const CardRelated = ({ data, noPrice, fixHeight, difRoute }) => {
   return (
     <Link
-      to={difRoute ? `/${difRoute}/${data.hash}` : `/shop/${data.hash}`}
+      href={difRoute ? `/${difRoute}/${data.hash}` : `/shop/${data.hash}`}
       className={`w-full h-full rounded-2xl relative overflow-hidden border-[1px] border-[#FFFFFF1A] flex flex-col ${
         fixHeight ? "" : "justify-between"
       } gap-4 bg-[#00000027] backdrop-blur-3xl transiton-[transform] duration-300 sm:p-5 p-3.5`}
