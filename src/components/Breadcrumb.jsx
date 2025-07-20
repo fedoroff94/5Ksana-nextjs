@@ -10,7 +10,7 @@ const Breadcamp = ({ auction, difRoute }) => {
   return (
     <div className="w-auto h-auto flex items-center gap-2 font-main text-base leading-[19.2px] font-[400]">
       <Link
-        to="/"
+        href="/"
         className="text-[#AAAAAA] hover:text-[#fff] transition-colors duration-[250ms]"
       >
         Home
@@ -42,14 +42,14 @@ const Breadcamp = ({ auction, difRoute }) => {
       </svg>
       {difRoute ? (
         <Link
-          to={`/${difRoute.toLowerCase()}`}
+          href={`/${difRoute.toLowerCase()}`}
           className="text-[#AAAAAA] hover:text-[#fff] transition-colors duration-[250ms]"
         >
           {difRoute}
         </Link>
       ) : (
         <Link
-          to="/shop"
+          href="/shop"
           className="text-[#AAAAAA] hover:text-[#fff] transition-colors duration-[250ms]"
         >
           Shop
