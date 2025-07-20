@@ -7,6 +7,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
+    "heroku-postbuild": "npm run build",
     "lint": "next lint",
     "generate-sitemap": "node src/scripts/generate-sitemap.js"
   },
