@@ -35,7 +35,7 @@ const Shop = ({ setCart, cart }) => {
 
   const fetchBTCPrice = useCallback(async () => {
     try {
-      const { data } = await axios.get(process.env.VITE_USDBTC_API);
+      const { data } = await axios.get(process.env.NEXT_PUBLIC_USDBTC_API);
       setBtcPrice(data.USD.sell);
     } catch (error) {
       console.error("Failed to fetch BTC price:", error);
